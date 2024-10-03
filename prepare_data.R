@@ -8,7 +8,7 @@ meta_tab <- my_table[c(1:28), c(10:50)]
 # Extract Data
 data_tab <- my_table[-c(1:28), -c(10:50)]
 
-# Format missing values in third column (check if your's is missing too or not)
+# Format missing values in third column (check if yours is missing too or not)
 data_tab[-1,2] <- data_tab[-1,3]
 data_tab <- data_tab[,-3]
 
