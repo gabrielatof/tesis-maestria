@@ -104,17 +104,17 @@ qiime diversity alpha-rarefaction \ #grafica de rarefaccion
 
 qiime feature-table rarefy \
   --i-table filtered-table-5.qza \
-  --p-sampling-depth 1200 \
-  --o-rarefied-table asv-table-1200.qza
+  --p-sampling-depth 800 \
+  --o-rarefied-table asv-table-800.qza
 
 qiime diversity alpha \
-  --i-table asv-table-1200.qza \
+  --i-table asv-table-800.qza \
   --p-metric observed_features \
-  --o-alpha-diversity observed-features-1200.qza
+  --o-alpha-diversity observed-features-800.qza
 
 qiime diversity alpha-group-significance \ # grafica de diversidad alfa 
-  --i-alpha-diversity observed-features-1200.qza \
+  --i-alpha-diversity observed-features-800.qza \
   --m-metadata-file metadata-humano.tsv \
-  --o-visualization observed-features-1200.qzv
+  --o-visualization observed-features-800.qzv
 
 
