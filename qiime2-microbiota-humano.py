@@ -117,4 +117,31 @@ qiime diversity alpha-group-significance \ # grafica de diversidad alfa
   --m-metadata-file metadata-humano.tsv \
   --o-visualization observed-features-800.qzv
 
+##### nuevo
+qiime phylogeny align-to-tree-mafft-fasttree \
+  --i-sequences asv-sequences-0.qza \
+  --output-dir phylogeny-align-to-tree-mafft-fasttree
+
+qiime diversity core-metrics-phylogenetic \
+  --i-phylogeny phylogeny-align-to-tree-mafft-fasttree/rooted_tree.qza \
+  --i-table filtered-table-5.qza \
+  --p-sampling-depth 1103 \
+  --m-metadata-file metadata-humano.tsv \
+  --output-dir diversity-core-metrics-phylogenetic
+
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity diversity-core-metrics-phylogenetic/faith_pd_vector.qza \
+  --m-metadata-file metadata-humano.tsv \
+  --o-visualization faith-pd-group-significance.qzv
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity diversity-core-metrics-phylogenetic/evenness_vector.qza \
+  --m-metadata-file metadata-humano.tsv \
+  --o-visualization evenness-group-significance.qzv
+
+qiime diversity beta-group-significance \
+  --i-distance-matrix diversity-core-metrics-phylogenetic/unweighted_unifrac_distance_matrix.qza \
+  --m-metadata-file metadata-humano.tsv \
+  --m-metadata-column Tissue \
+  --p-pairwise \
+  --o-visualization unweighted-unifrac-tissue-group-significance.qzv
 
