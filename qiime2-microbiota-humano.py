@@ -145,3 +145,19 @@ qiime diversity beta-group-significance \
   --p-pairwise \
   --o-visualization unweighted-unifrac-tissue-group-significance.qzv
 
+qiime taxa filter-table \
+  --i-table feature-table-0.qza \
+  --i-taxonomy taxonomy.qza \
+  --p-include g__ \
+  --o-filtered-table filtered-table-genus.qza
+
+qiime metadata tabulate \
+  --m-input-file filtered-table-genus.qza \
+  --o-visualization filtered-genus.qzv
+
+qiime feature-table filter-samples \
+  --i-table filtered-table-genus.qza \
+  --m-metadata-file metadata-humano.tsv \
+  --p-where '[Tissue]="Human breast tumor"' \
+  --o-filtered-table btumor-table.qza
+
