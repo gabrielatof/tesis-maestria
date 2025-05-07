@@ -69,4 +69,29 @@ qiime metadata tabulate \
   --m-input-file taxonomy.qza \
   --o-visualization taxonomy.qzv
 
+#El siguiente paso es eliminar las mitocondrias y los cloroplastos de las secuencias y las tablas de ASV
+qiime taxa filter-table \
+  --i-table table.qza \
+  --i-taxonomy taxonomy.qza \
+  --p-exclude mitochondria,chloroplast \
+  --o-filtered-table table-no-mitochondria-no-chloroplast.qza
 
+qiime taxa filter-seqs \
+  --i-sequences rep-seqs.qza \
+  --i-taxonomy taxonomy.qza \
+  --p-exclude mitochondria,chloroplast \
+  --o-filtered-sequences sequences-no-mitochondria-no-chloroplast.qza
+
+####      Generación árbol filognético
+
+wget \
+  -O "sepp-refs-gg-13-8.qza" \
+  "https://data.qiime2.org/classifiers/sepp-ref-dbs/sepp-refs-gg-13-8.qza" 
+#descargamos una base de referencia para la generación del árbol
+
+qiime fragment-insertion sepp \
+  --i-representative-sequences equences-no-mitochondria-no-chloroplast.qza \
+  --i-reference-database sepp-refs-gg-13-8.qza \
+  --o-tree tree.qza \
+  --o-placements tree_placements.qza \
+  --p-threads 1  
