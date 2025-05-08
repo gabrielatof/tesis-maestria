@@ -257,3 +257,23 @@ qiime taxa barplot \
   --i-taxonomy taxonomy.qza \
   --m-metadata-file metadata.tsv \
   --o-visualization taxa-bar-plot-genus.qzv
+
+  #### Alpha rarefaction
+  qiime diversity alpha-rarefaction \
+  --i-table filtered-table-genus.qza\
+  --p-max-depth 600 \
+  --m-metadata-file metadata.tsv \
+  --o-visualization alpha-rarefaction.qzv
+
+  #### Abundancias diferenciales
+qiime composition ancombc \
+  --i-table filtered-table-genus.qza \
+  --m-metadata-file metadata.tsv \
+  --p-formula Tissue \
+  --o-differentials ancombc.qza
+qiime composition da-barplot \
+  --i-data ancombc.qza \
+  --o-visualization da-barplot.qzv
+
+
+  
