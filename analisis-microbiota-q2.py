@@ -309,4 +309,16 @@ qiime taxa collapse \
   --i-data ancombc-7l.qza \
   --o-visualization level7-da-barplot.qzv
 
+  ####      Abundancias relativas
+  qiime feature-table relative-frequency \
+  --i-table table-level6.qza \
+  --o-realtive-frequency-table rel-table.qza 
+  #Esa tabla contiene las abundancias en relativa frecuencia
+
+qiime tools export --input-path rel-table.qza --output-path exported
+# Para conseguir la tabla en un archivo tsv primero exportamos los datos en formato biom
+
+biom convert -i exported/feature-table.biom -o exported/feature-table.tsv --to-tsv #tenemos la tabla de abundancias relativas en una tabla en formato tsv 
+  
+
   
