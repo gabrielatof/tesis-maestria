@@ -275,5 +275,38 @@ qiime composition da-barplot \
   --i-data ancombc.qza \
   --o-visualization da-barplot.qzv
 
+#anotación de lqa taxonomia a nivel genero
+ qiime taxa collapse \
+  --i-table filtered-table-genus.qza \
+  --i-taxonomy ~/Documents/tesis-maestria/qiime2-segundo-ejercicio/taxonomy.qza \
+  --p-level 6 \
+  --o-collapsed-table table-level6.qza
+
+  qiime composition ancombc \
+  --i-table table-level6.qza \
+  --m-metadata-file metadata.tsv \
+  --p-formula Tissue \
+  --o-differentials ancombc-level6.qza
+
+  qiime composition da-barplot \
+  --i-data ancombc-6l.qza \
+  --o-visualization level6-da-barplot.qzv
+
+#a nivel especie
+qiime taxa collapse \
+  --i-table filtered-table-genus.qza \
+  --i-taxonomy ~/Documents/tesis-maestria/qiime2-segundo-ejercicio/taxonomy.qza \
+  --p-level 7 \
+  --o-collapsed-table table-level7.qza
+
+  qiime composition ancombc \
+  --i-table table-level7.qza \
+  --m-metadata-file metadata.tsv \
+  --p-formula Tissue \
+  --o-differentials ancombc-level7.qza
+
+  qiime composition da-barplot \
+  --i-data ancombc-7l.qza \
+  --o-visualization level7-da-barplot.qzv
 
   
