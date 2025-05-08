@@ -82,16 +82,32 @@ qiime taxa filter-seqs \
   --p-exclude mitochondria,chloroplast \
   --o-filtered-sequences sequences-no-mitochondria-no-chloroplast.qza
 
-####      Generación árbol filognético
+####     Análisis de diversidad
+#Instalar el env kmerizer para realizar los análisis 
+sudo apt install git
 
-wget \
-  -O "sepp-refs-gg-13-8.qza" \
-  "https://data.qiime2.org/classifiers/sepp-ref-dbs/sepp-refs-gg-13-8.qza" 
-#descargamos una base de referencia para la generación del árbol
+git clone https://github.com/bokulich-lab/q2-kmerizer.git
+cd q2-kmerizer
 
-qiime fragment-insertion sepp \
-  --i-representative-sequences equences-no-mitochondria-no-chloroplast.qza \
-  --i-reference-database sepp-refs-gg-13-8.qza \
-  --o-tree tree.qza \
-  --o-placements tree_placements.qza \
-  --p-threads 1  
+conda env create --name q2-kmerizer-amplicon-2024.10 --file https://raw.githubusercontent.com/bokulich-lab/q2-kmerizer/refs/heads/main/environment-files/q2-kmerizer-qiime2-amplicon-2024.10.yml
+
+conda activate q2-kmerizer-amplicon-2024.10
+
+make install
+
+qiime kmerizer core-metrics \
+    --i-sequences sequences-no-mitochondria-no-chloroplast.qza \
+    --i-table table-no-mitochondria-no-chloroplast.qza \
+    --p-samplng-depth 2000 \
+    --m-metadata-file metadata.tsv \
+    --p-color-by Tissue \
+    --p-max-features 5000 \
+    --output-dir core-metrics/ #en esta carperta se encuentran todos los artefactos de los análisis
+
+conda deactivate
+
+conda activate qiime2-amplicon-2024.10
+      
+
+
+
