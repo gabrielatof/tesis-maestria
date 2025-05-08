@@ -98,7 +98,7 @@ make install
 qiime kmerizer core-metrics \
     --i-sequences sequences-no-mitochondria-no-chloroplast.qza \
     --i-table table-no-mitochondria-no-chloroplast.qza \
-    --p-samplng-depth 2000 \
+    --p-sampling-depth 2000 \
     --m-metadata-file metadata.tsv \
     --p-color-by Tissue \
     --p-max-features 5000 \
@@ -107,7 +107,153 @@ qiime kmerizer core-metrics \
 conda deactivate
 
 conda activate qiime2-amplicon-2024.10
-      
+
+#Visualización de diversidad alfa
+
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity core-metrics/shannon_vector.qza \
+  --m-metadata-file metadata.tsv \                                              
+  --o-visualization core-metrics/shannon_vector.qzv
+
+
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity core-metrics/observed_features_vector.qza \
+  --m-metadata-file metadata-humano.tsv \
+  --o-visualization core-metrics/observed_features_vector.qzv
+
+#Visualización de diversidad beta
+qiime diversity beta-group-significance \
+  --i-distance-matrix core-metrics/jaccard_distance_matrix.qza \
+  --m-metadata-file metadata.tsv \
+  --m-metadata-column Tissue \
+  --p-pairwise \
+  --o-visualization core-metrics/jaccard_distance_matrix.qzv
+
+qiime emperor plot \
+  --i-pcoa core-metrics/bray_curtis_pcoa_results.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization core-metrics/bray_curtis_pcoa_results.qzv
+
+
+qiime diversity beta-group-significance \
+  --i-distance-matrix core-metrics/bray_curtis_distance_matrix.qza \
+  --m-metadata-file metadata.tsv \
+  --m-metadata-column Tissue \
+  --p-pairwise \
+  --o-visualization core-metrics/bray_curtis_distance_matrix.qzv
+
+qiime emperor plot \
+  --i-pcoa core-metrics/bray_curtis_pcoa_results.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization core-metrics/bray_curtis_pcoa_results.qzv
+
+qiime diversity adonis \
+  --i-distance-matrix core-metrics/jaccard_distance_matrix.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization core-metrics/jaccard_adonis.qzv \
+  --p-formula Tissue
+
+
+####      Análisis taxonómicos
+
+qiime taxa barplot \
+  --i-table table.qza \
+  --i-taxonomy taxonomy.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization taxa-bar-plots.qzv
 
 
 
+##############################################################################################################################################
+########################### REPETICIÓN DE ANÁLISIS A NIVEL DE GENÉRO #########################################################################
+##############################################################################################################################################
+
+
+#Filtrar la tabla de ASV para tener unicamente a nivel genero
+qiime taxa filter-table \
+  --i-table table-no-mitochondria-no-chloroplast.qza \
+  --i-taxonomy taxonomy.qza \
+  --p-include g__ \
+  --o-filtered-table analisis-genus/filtered-table-genus.qza
+
+#para visualizarlo
+qiime feature-table summarize \
+  --i-table analisis-genus/filtered-table-genus.qza \
+  --m-sample-metadata-file metadata.tsv \
+  --o-visualization analisis-genus/filtered-table-genus.qzv
+
+#Filtrar secuencias de ASV para tener unicamente las de nivel genero
+qiime taxa filter-seqs \
+  --i-sequences sequences-no-mitochondria-no-chloroplast.qza \
+  --i-taxonomy taxonomy.qza \
+  --p-include g__ \
+  --o-filtered-sequences analisis-genus/filtered-seqs-genus.qza
+
+#Para visualizarlo
+qiime feature-table tabulate-seqs \
+  --i-data analisis-genus/filtered-seqs-genus.qza \
+  --o-visualization analisis-genus/filtered-seqs-genus.qzv
+
+#Analisis de diversidad 
+conda activate q2-kmerizer-amplicon-2024.10
+
+qiime kmerizer core-metrics \
+    --i-sequences filtered-seqs-genus.qza \
+    --i-table filtered-table-genus.qza \
+    --p-sampling-depth 170 \
+    --m-metadata-file metadata.tsv \
+    --p-color-by Tissue \
+    --p-max-features 5000 \
+    --output-dir core-metrics/ 
+
+conda deactivate
+
+conda activate qiime2-amplicon-2024.10
+
+cd analisis-genus/
+
+#Visualización de diversidad alfa
+
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity core-metrics/shannon_vector.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization core-metrics/shannon_vector.qzv
+
+qiime diversity alpha-group-significance \
+  --i-alpha-diversity core-metrics/observed_features_vector.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization core-metrics/observed_features_vector.qzv
+
+#Visualización de diversidad beta
+qiime diversity beta-group-significance \
+  --i-distance-matrix core-metrics/jaccard_distance_matrix.qza \
+  --m-metadata-file metadata.tsv \
+  --m-metadata-column Tissue \
+  --p-pairwise \
+  --o-visualization core-metrics/jaccard_distance_matrix.qzv
+
+qiime emperor plot \
+  --i-pcoa core-metrics/bray_curtis_pcoa_results.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization core-metrics/bray_curtis_pcoa_results.qzv
+
+
+qiime diversity beta-group-significance \
+  --i-distance-matrix core-metrics/bray_curtis_distance_matrix.qza \
+  --m-metadata-file metadata.tsv \
+  --m-metadata-column Tissue \
+  --p-pairwise \
+  --o-visualization core-metrics/bray_curtis_distance_matrix.qzv
+
+qiime emperor plot \
+  --i-pcoa core-metrics/bray_curtis_pcoa_results.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization core-metrics/bray_curtis_pcoa_results.qzv
+
+#### Analisis taxónomicos
+  
+qiime taxa barplot \
+  --i-table filtered-table-genus.qza \
+  --i-taxonomy taxonomy.qza \
+  --m-metadata-file metadata.tsv \
+  --o-visualization taxa-bar-plot-genus.qzv
