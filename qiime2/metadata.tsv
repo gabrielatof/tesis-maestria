@@ -1,0 +1,14 @@
+id	Sample	Organism	Tissue	Sample_process
+SRR13153924	HuNor1	Homo sapiens	Human normal breast	homogenize
+SRR13153925	HuTu1	Homo sapiens	Human breast tumor	homogenize
+SRR13153926	HuNor2	Homo sapiens	Human normal breast	homogenize
+SRR13153927	HuTu2	Homo sapiens	Human breast tumor	homogenize
+SRR13153929	HuNor4	Homo sapiens	Human normal breast	homogenize
+SRR13153930	HuTu4	Homo sapiens	Human breast tumor	homogenize
+SRR13153935	HuTu7	Homo sapiens	Human breast tumor	homogenize
+SRR13153936	HuNor10	Homo sapiens	Human normal breast	homogenize
+SRR13153937	HuNor9	Homo sapiens	Human normal breast	homogenize
+SRR13153938	HuTu6	Homo sapiens	Human breast tumor	homogenize
+SRR13153940	HuTu8	Homo sapiens	Human breast tumor	homogenize
+SRR13153941	HuTu5	Homo sapiens	Human breast tumor	homogenize
+SRR13153942	HuTu3	Homo sapiens	Human breast tumor	homogenize
