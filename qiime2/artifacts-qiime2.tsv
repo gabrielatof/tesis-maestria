@@ -11,9 +11,7 @@ filtered-seqs-genus.qza	Lista de las secuencias ASV's filtradas unicamente a niv
 ancombc-level6.qza	análisis de abundancias diferenciales significativas de genéro
 table-level6.qza	tabla con taxa collapse de nivel 6 (genéro)
 rel-table.qza	tabla con las abundancias relativas 
-	
-	
-Plots	Descripción
+
 taxa-bar-plot-genus.qzv	Plot bar de abundancias de los genéros 
 alpha-rarefaction.qzv	Plot de rarefacción de las secuencias
 level6-da-barplot.qzv	Plot de las abundancias diferenciales de ancom-bc a nivel genéro
