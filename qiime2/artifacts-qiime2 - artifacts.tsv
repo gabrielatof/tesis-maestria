@@ -1,0 +1,26 @@
+Artifacts	Descripción
+demux-paired-end.qza	Artefacto donde se encuentran las secuencias demultiplexadas 
+rep-seqs.qza	Lista de las secuencias ASV's obtenidos
+table.qza	Tabla de las ASV's y su abundancia
+denosing-stats.qza	Resultados del denosing (filtrado) de DADA2
+taxonomy.qza	Asignaciones taxónomicas, con el ASV asociado a su taxón y el intervalo de confianza
+table-no-mitochondria-no-chloroplast.qza	tabla de ASV filtrado sin secuencias de mitocondrias o cloroplastos
+sequences-no-mitochondria-no-chloroplast.qza	Lista de las secuencias ASV's filtradas sin secuencias de mitocondrias o cloroplastos
+filtered-table-genus.qza	Tabla de ASV's filtradas unicamente a nivel de genéro
+filtered-seqs-genus.qza	Lista de las secuencias ASV's filtradas unicamente a nivel de genéro
+ancombc-level6.qza	análisis de abundancias diferenciales significativas de genéro
+table-level6.qza	tabla con taxa collapse de nivel 6 (genéro)
+rel-table.qza	tabla con las abundancias relativas 
+	
+	
+Plots	Descripción
+taxa-bar-plot-genus.qzv	Plot bar de abundancias de los genéros 
+alpha-rarefaction.qzv	Plot de rarefacción de las secuencias
+level6-da-barplot.qzv	Plot de las abundancias diferenciales de ancom-bc a nivel genéro
+bray_curtis_distance_matrix.qzv	Plot de diversidad beta por bray curtis a nivel de genéro
+bray_curtis_pcoa_results.qzv	PCOA de la diversidad beta por bray curtis a nivel genero
+jaccard_distance_matrix.qzv	Plot de diversidad beta por jaccard a nivel de genéro
+jaccard_pcoa_results.qzv	PCOA de la diversidad beta por jaccard a nivel genero
+observed_features_vector.qzv	Plot de diversidad alfa por especies observadas
+shannon_vector.qzv	Plot de diversidad alfa por índice de shannon
+scatterplot.qzv	buscar
