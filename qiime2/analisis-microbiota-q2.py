@@ -68,6 +68,36 @@ qiime feature-classifier classify-sklearn \
 qiime metadata tabulate \
   --m-input-file taxonomy.qza \
   --o-visualization taxonomy.qzv
+ 
+
+# SILVA full-lenght sequences and Silva full-lenght taxonomy se descargaron de aqui: 
+#https://docs.qiime2.org/2024.10/data-resources/#taxonomy-classifiers-for-use-with-q2-feature-classifier 
+
+# Los primers que se utilizaron en este estudio  fue el 515F y 805R que amplifican la región V4
+# primer set 515F (TCGTCGGCAGCGTCAGATGTGTATAAGAGACAGGTGYCAGCMGCCGCGGTAA) and 805R (GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAGGGACTACNVGGGTWTCTAAT)
+
+# extract primer-specific regions 
+ qiime feature-classifier extract-reads \
+  --i-sequences silva-138-99-seqs.qza \
+  --p-f-primer GTGCCAGCMGCCGCGGTAA \
+  --p-r-primer GACTACHVGGGTATCTAATCC \
+  --p-trunc-len 0 \
+  --o-reads silva-138-343F-798R.qza
+
+####correr esto en la terminal:
+
+# naive bayes classifier training 
+qiime feature-classifier fit-classifier-naive-bayes \
+  --i-reference-reads silva-138-343F-798R.qza \
+  --i-reference-taxonomy silva-138-99-tax.qza \
+  --o-classifier silva-138-343F-798R-classifier.qza
+
+# this were the most time-consuming commands
+
+
+
+
+
 
 #El siguiente paso es eliminar las mitocondrias y los cloroplastos de las secuencias y las tablas de ASV
 qiime taxa filter-table \
