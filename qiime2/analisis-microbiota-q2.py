@@ -201,9 +201,9 @@ qiime diversity beta-group-significance \
   --o-visualization core-metrics/jaccard_distance_matrix.qzv
 
 qiime emperor plot \
-  --i-pcoa core-metrics/bray_curtis_pcoa_results.qza \
+  --i-pcoa core-metrics/jaccard_pcoa_results.qza \
   --m-metadata-file metadata.tsv \
-  --o-visualization core-metrics/bray_curtis_pcoa_results.qzv
+  --o-visualization core-metrics/jaccard_pcoa_results.qzv
 
 
 qiime diversity beta-group-significance \
