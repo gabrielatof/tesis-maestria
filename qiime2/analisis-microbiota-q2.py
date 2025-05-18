@@ -104,6 +104,57 @@ qiime taxa filter-seqs \
   --o-filtered-sequences sequences-no-mitochondria-no-chloroplast.qza
 
 ####     Análisis de diversidad
+### Trabajaremos unicamente a nivel de género
+
+#Filtrar la tabla de ASV para tener unicamente a nivel genero
+qiime taxa filter-table \
+  --i-table table-no-mitochondria-no-chloroplast.qza \
+  --i-taxonomy taxonomy.qza \
+  --p-include g__ \
+  --o-filtered-table filtered-table-genus.qza
+
+#para visualizarlo
+qiime feature-table summarize \
+  --i-table filtered-table-genus.qza \
+  --m-sample-metadata-file metadata.tsv \
+  --o-visualization filtered-table-genus.qzv
+
+#Filtrar secuencias de ASV para tener unicamente las de nivel genero
+qiime taxa filter-seqs \
+  --i-sequences sequences-no-mitochondria-no-chloroplast.qza \
+  --i-taxonomy taxonomy.qza \
+  --p-include g__ \
+  --o-filtered-sequences filtered-seqs-genus.qza
+
+#Para visualizarlo
+qiime feature-table tabulate-seqs \
+  --i-data filtered-seqs-genus.qza \
+  --o-visualization filtered-seqs-genus.qzv
+
+#Hubo asignación del nominio eucariota, por lo cual debemos filtrar de nuevo para 
+#asegurarnos de quedarnos unicamente con bacterias
+
+qiime taxa filter-table \
+  --i-table filtered-table-genus.qza \
+  --i-taxonomy taxonomy.qza \
+  --p-include d__Bacteria \
+  --o-filtered-table filtered-table.qza
+
+qiime feature-table summarize \
+  --i-table filtered-table.qza \
+  --m-sample-metadata-file metadata.tsv \
+  --o-visualization filtered-table.qzv
+
+qiime taxa filter-seqs \
+  --i-sequences filtered-seqs-genus.qza \
+  --i-taxonomy taxonomy.qza \
+  --p-include d__Bacteria \
+  --o-filtered-sequences filtered-seqs.qza
+
+qiime feature-table tabulate-seqs \
+  --i-data filtered-seqs.qza \
+  --o-visualization filtered-seqs.qzv
+
 #Instalar el env kmerizer para realizar los análisis 
 sudo apt install git
 
@@ -117,9 +168,9 @@ conda activate q2-kmerizer-amplicon-2024.10
 make install
 
 qiime kmerizer core-metrics \
-    --i-sequences sequences-no-mitochondria-no-chloroplast.qza \
-    --i-table table-no-mitochondria-no-chloroplast.qza \
-    --p-sampling-depth 2000 \
+    --i-sequences filtered-seqs.qza \
+    --i-table filtered-table.qza \
+    --p-sampling-depth 170 \
     --m-metadata-file metadata.tsv \
     --p-color-by Tissue \
     --p-max-features 5000 \
@@ -128,110 +179,6 @@ qiime kmerizer core-metrics \
 conda deactivate
 
 conda activate qiime2-amplicon-2024.10
-
-#Visualización de diversidad alfa
-
-qiime diversity alpha-group-significance \
-  --i-alpha-diversity core-metrics/shannon_vector.qza \
-  --m-metadata-file metadata.tsv \                                              
-  --o-visualization core-metrics/shannon_vector.qzv
-
-
-qiime diversity alpha-group-significance \
-  --i-alpha-diversity core-metrics/observed_features_vector.qza \
-  --m-metadata-file metadata-humano.tsv \
-  --o-visualization core-metrics/observed_features_vector.qzv
-
-#Visualización de diversidad beta
-qiime diversity beta-group-significance \
-  --i-distance-matrix core-metrics/jaccard_distance_matrix.qza \
-  --m-metadata-file metadata.tsv \
-  --m-metadata-column Tissue \
-  --p-pairwise \
-  --o-visualization core-metrics/jaccard_distance_matrix.qzv
-
-qiime emperor plot \
-  --i-pcoa core-metrics/bray_curtis_pcoa_results.qza \
-  --m-metadata-file metadata.tsv \
-  --o-visualization core-metrics/bray_curtis_pcoa_results.qzv
-
-
-qiime diversity beta-group-significance \
-  --i-distance-matrix core-metrics/bray_curtis_distance_matrix.qza \
-  --m-metadata-file metadata.tsv \
-  --m-metadata-column Tissue \
-  --p-pairwise \
-  --o-visualization core-metrics/bray_curtis_distance_matrix.qzv
-
-qiime emperor plot \
-  --i-pcoa core-metrics/bray_curtis_pcoa_results.qza \
-  --m-metadata-file metadata.tsv \
-  --o-visualization core-metrics/bray_curtis_pcoa_results.qzv
-
-qiime diversity adonis \
-  --i-distance-matrix core-metrics/jaccard_distance_matrix.qza \
-  --m-metadata-file metadata.tsv \
-  --o-visualization core-metrics/jaccard_adonis.qzv \
-  --p-formula Tissue
-
-
-####      Análisis taxonómicos
-
-qiime taxa barplot \
-  --i-table table.qza \
-  --i-taxonomy taxonomy.qza \
-  --m-metadata-file metadata.tsv \
-  --o-visualization taxa-bar-plots.qzv
-
-
-
-##############################################################################################################################################
-########################### REPETICIÓN DE ANÁLISIS A NIVEL DE GENÉRO #########################################################################
-##############################################################################################################################################
-
-
-#Filtrar la tabla de ASV para tener unicamente a nivel genero
-qiime taxa filter-table \
-  --i-table table-no-mitochondria-no-chloroplast.qza \
-  --i-taxonomy taxonomy.qza \
-  --p-include g__ \
-  --o-filtered-table analisis-genus/filtered-table-genus.qza
-
-#para visualizarlo
-qiime feature-table summarize \
-  --i-table analisis-genus/filtered-table-genus.qza \
-  --m-sample-metadata-file metadata.tsv \
-  --o-visualization analisis-genus/filtered-table-genus.qzv
-
-#Filtrar secuencias de ASV para tener unicamente las de nivel genero
-qiime taxa filter-seqs \
-  --i-sequences sequences-no-mitochondria-no-chloroplast.qza \
-  --i-taxonomy taxonomy.qza \
-  --p-include g__ \
-  --o-filtered-sequences analisis-genus/filtered-seqs-genus.qza
-
-#Para visualizarlo
-qiime feature-table tabulate-seqs \
-  --i-data analisis-genus/filtered-seqs-genus.qza \
-  --o-visualization analisis-genus/filtered-seqs-genus.qzv
-
-#Analisis de diversidad 
-conda activate q2-kmerizer-amplicon-2024.10
-
-qiime kmerizer core-metrics \
-    --i-sequences filtered-seqs-genus.qza \
-    --i-table filtered-table-genus.qza \
-    --p-sampling-depth 170 \
-    --m-metadata-file metadata.tsv \
-    --p-color-by Tissue \
-    --p-max-features 5000 \
-    --output-dir core-metrics/ 
-
-conda deactivate
-
-conda activate qiime2-amplicon-2024.10
-
-cd analisis-genus/
 
 #Visualización de diversidad alfa
 
@@ -274,21 +221,21 @@ qiime emperor plot \
 #### Analisis taxónomicos
   
 qiime taxa barplot \
-  --i-table filtered-table-genus.qza \
+  --i-table filtered-table.qza \
   --i-taxonomy taxonomy.qza \
   --m-metadata-file metadata.tsv \
   --o-visualization taxa-bar-plot-genus.qzv
 
   #### Alpha rarefaction
   qiime diversity alpha-rarefaction \
-  --i-table filtered-table-genus.qza\
+  --i-table filtered-table.qza\
   --p-max-depth 600 \
   --m-metadata-file metadata.tsv \
   --o-visualization alpha-rarefaction.qzv
 
   #### Abundancias diferenciales
 qiime composition ancombc \
-  --i-table filtered-table-genus.qza \
+  --i-table filtered-table.qza \
   --m-metadata-file metadata.tsv \
   --p-formula Tissue \
   --o-differentials ancombc.qza
@@ -298,8 +245,8 @@ qiime composition da-barplot \
 
 #anotación de lqa taxonomia a nivel genero
  qiime taxa collapse \
-  --i-table filtered-table-genus.qza \
-  --i-taxonomy ~/Documents/tesis-maestria/qiime2-segundo-ejercicio/taxonomy.qza \
+  --i-table filtered-table.qza \
+  --i-taxonomy taxonomy.qza \
   --p-level 6 \
   --o-collapsed-table table-level6.qza
 
@@ -310,36 +257,14 @@ qiime composition da-barplot \
   --o-differentials ancombc-level6.qza
 
   qiime composition da-barplot \
-  --i-data ancombc-6l.qza \
+  --i-data ancombc-level6.qza \
   --o-visualization level6-da-barplot.qzv
 
-#a nivel especie
-qiime taxa collapse \
-  --i-table filtered-table-genus.qza \
-  --i-taxonomy ~/Documents/tesis-maestria/qiime2-segundo-ejercicio/taxonomy.qza \
-  --p-level 7 \
-  --o-collapsed-table table-level7.qza
-
-  qiime composition ancombc \
-  --i-table table-level7.qza \
-  --m-metadata-file metadata.tsv \
-  --p-formula Tissue \
-  --o-differentials ancombc-level7.qza
-
-  qiime composition da-barplot \
-  --i-data ancombc-7l.qza \
-  --o-visualization level7-da-barplot.qzv
-
   ####      Abundancias relativas
-  qiime feature-table relative-frequency \
-  --i-table table-level6.qza \
-  --o-realtive-frequency-table rel-table.qza 
+ qiime feature-table relative-frequency --i-table table-level6.qza --o-relative-frequency-table rel-table.qza
   #Esa tabla contiene las abundancias en relativa frecuencia
 
 qiime tools export --input-path rel-table.qza --output-path exported
 # Para conseguir la tabla en un archivo tsv primero exportamos los datos en formato biom
 
 biom convert -i exported/feature-table.biom -o exported/feature-table.tsv --to-tsv #tenemos la tabla de abundancias relativas en una tabla en formato tsv 
-  
-
-  
