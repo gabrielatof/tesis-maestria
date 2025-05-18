@@ -54,24 +54,11 @@ qiime feature-table tabulate-seqs \
   --o-visualization rep-seqs.qzv
 
 ####      Asignación taxonómica
-
-wget \
-  -O 'gg-13-8-99-515-806-nb-classifier.qza' \
-  'https://docs.qiime2.org/jupyterbooks/cancer-microbiome-intervention-tutorial/data/030-tutorial-downstream/020-taxonomy/gg-13-8-99-515-806-nb-classifier.qza'
-#descargamos la base de datos para la asignación taxonómica
-
-qiime feature-classifier classify-sklearn \
-  --i-classifier gg-13-8-99-515-806-nb-classifier.qza \
-  --i-reads rep-seqs.qza \
-  --o-classification taxonomy.qza
-
-qiime metadata tabulate \
-  --m-input-file taxonomy.qza \
-  --o-visualization taxonomy.qzv
- 
+# Esta parte se corrio en el servidor de 3.58TB, ya que es muy pesado para correrlo de manera local. 
 
 # SILVA full-lenght sequences and Silva full-lenght taxonomy se descargaron de aqui: 
-#https://docs.qiime2.org/2024.10/data-resources/#taxonomy-classifiers-for-use-with-q2-feature-classifier 
+#https://docs.qiime2.org/2024.10/data-resources/#taxonomy-classifiers-for-use-with-q2-feature-classifier
+
 
 # Los primers que se utilizaron en este estudio  fue el 515F y 805R que amplifican la región V4
 # primer set 515F (TCGTCGGCAGCGTCAGATGTGTATAAGAGACAGGTGYCAGCMGCCGCGGTAA) and 805R (GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAGGGACTACNVGGGTWTCTAAT)
@@ -92,12 +79,16 @@ qiime feature-classifier fit-classifier-naive-bayes \
   --i-reference-taxonomy silva-138-99-tax.qza \
   --o-classifier silva-138-343F-798R-classifier.qza
 
-# this were the most time-consuming commands
+qiime feature-classifier classify-sklearn \
+  --i-classifier silva-138-343F-798R-classifier.qzaa \
+  --i-reads rep-seqs.qza \
+  --o-classification taxonomy.qza
 
+#### a partir de aqui ya se corrio de manera local
 
-
-
-
+qiime metadata tabulate \
+  --m-input-file taxonomy.qza \
+  --o-visualization taxonomy.qzv
 
 #El siguiente paso es eliminar las mitocondrias y los cloroplastos de las secuencias y las tablas de ASV
 qiime taxa filter-table \
